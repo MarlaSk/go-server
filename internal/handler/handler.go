@@ -103,7 +103,7 @@ func (h *ToDoHandler) CreateToDo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	todo, err :=	h.Service.Create(t.S)
+	todo, err :=	h.Service.Create(r.Context(), t.S)
 
 	if err != nil {
 		http.Error(w, "не получилось создать запись", http.StatusBadRequest)
@@ -135,7 +135,7 @@ func (h *ToDoHandler) GetToDoById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	todo, err := h.Service.GetById(id)
+	todo, err := h.Service.GetById(r.Context(), id)
 	if err != nil {
 		fmt.Println("Задача не найдена")
 		http.Error(w, "Задача не найдена", http.StatusNotFound)

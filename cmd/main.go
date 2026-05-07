@@ -1,15 +1,17 @@
 package main
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
-	_"github.com/lib/pq"
 	"sandbox/internal/config"
 	"sandbox/internal/handler"
 	"sandbox/internal/service"
 	"sandbox/internal/storage"
+
+	_ "github.com/lib/pq"
 )
 
 func main() {
@@ -43,8 +45,12 @@ func main() {
 	if err := db.Ping(); err != nil {
 		log.Fatal("Не удалось пингануть к базе данных:", err)
 	}
+
+	if err := storage.CreateTodoTable(context.Background(), db); err != nil {
+		log.Fatal("Не удалось создать таблицу:", err)
+	}
 	//Слой хранения данных
-	repo := storage.NewTodoStorage()
+	repo := storage.NewPostgresRepo(db)
 
 	//Слой бизнес логики
 	service := service.NewTodoService(repo)
