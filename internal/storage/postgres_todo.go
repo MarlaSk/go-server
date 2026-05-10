@@ -26,7 +26,15 @@ func (r *PostgresRepo) Create(ctx context.Context, todo domain.ToDo) (domain.ToD
 }
 
 func (r *PostgresRepo) GetById(ctx context.Context, id int) (domain.ToDo, error) {
-	return domain.ToDo{}, nil
+	query := `SELECT id, title, completed FROM todos WHERE id = $1`
+
+	var todo domain.ToDo
+	row := r.db.QueryRowContext(ctx, query, id)
+	if err := row.Scan(&todo.Id, &todo.Title, &todo.Completed); err != nil {
+		return domain.ToDo{}, err
+	}
+
+	return todo, nil
 }
 
 func CreateTodoTable(ctx context.Context, db *sql.DB) error {

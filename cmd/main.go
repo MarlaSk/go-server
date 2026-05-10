@@ -29,7 +29,7 @@ func main() {
 	// if err != nil {
 	// 	fmt.Println("Не смог поднять сервер:", err)
 	// }
-	cfg,err := config.Load("config/config.json")
+	cfg, err := config.Load("config/config.json")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -41,7 +41,7 @@ func main() {
 		log.Fatal("Не удалось подключиться к базе данных:", err)
 	}
 	defer db.Close()
-	
+
 	if err := db.Ping(); err != nil {
 		log.Fatal("Не удалось пингануть к базе данных:", err)
 	}
@@ -62,7 +62,7 @@ func main() {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/create", handler.CreateToDo)
+	mux.HandleFunc("/todo/", handler.GetToDoById)
 
 	http.ListenAndServe(cfg.GetServerPort(), mux)
 }
-
