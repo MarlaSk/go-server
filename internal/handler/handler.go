@@ -102,11 +102,10 @@ func (h *ToDoHandler) CreateToDo(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Плохое тело", http.StatusBadRequest)
 		return
 	}
-
 	todo, err :=	h.Service.Create(r.Context(), t.S)
 
 	if err != nil {
-		http.Error(w, "не получилось создать запись", http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return 
 	}
 

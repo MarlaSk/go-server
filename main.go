@@ -1,23 +1,25 @@
 package main
 
-import (
-	"fmt"
-	"sync"
-	"time"
-)
+import "fmt"
+
+type name string
+func (n name) hello() {
+	fmt.Println("Hello World")
+} 
+
+type add func(int, int) int
+
+func (a add) minus(x, b int) int {
+	return x - b
+}
+
+func sum (a, b int) int {
+	return a + b
+}
 
 func main() {
-	counter := 0
- 
-	var mu sync.Mutex
-	for i := 0; i < 1000; i++ {
-		go func() {
-			mu.Lock()
-			counter++
-			defer mu.Unlock()
-		}()
-	}
-
- 	time.Sleep(1 * time.Second)
-	fmt.Println(counter)
+	x := name(" ")
+	x.hello()
+	test := add(sum)
+	test.minus(3, 2)
 }

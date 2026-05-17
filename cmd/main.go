@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"sandbox/internal/config"
 	"sandbox/internal/handler"
+	"sandbox/internal/middleware"
 	"sandbox/internal/service"
 	"sandbox/internal/storage"
 
@@ -61,7 +62,7 @@ func main() {
 	//Создаем сервер
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/create", handler.CreateToDo)
+	mux.HandleFunc("/create", middleware.Logging(handler.CreateToDo))
 	mux.HandleFunc("/todo/", handler.GetToDoById)
 
 	http.ListenAndServe(cfg.GetServerPort(), mux)
